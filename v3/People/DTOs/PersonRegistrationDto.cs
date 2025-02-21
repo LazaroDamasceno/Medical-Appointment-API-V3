@@ -1,3 +1,21 @@
-﻿namespace v3.People.DTOs;
+﻿using System.ComponentModel.DataAnnotations;
 
-public record PersonRegistrationDto();
+namespace v3.People.DTOs;
+
+public record PersonRegistrationDto(
+    [Required]
+    string FirstName,
+    string MiddleName,
+    [Required]
+    string LastName,
+    [Required]
+    DateOnly BirthDate,
+    [Required, StringLength(9)]
+    string Ssn,
+    [Required, EmailAddress]
+    string Email,
+    [Required, StringLength(10)]
+    string PhoneNumber,
+    [Required, MinLength(1)]
+    string Gender
+);

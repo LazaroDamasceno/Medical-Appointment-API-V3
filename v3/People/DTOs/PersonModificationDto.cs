@@ -2,14 +2,14 @@
 
 namespace v3.People.DTOs;
 
-public record PersonRegistrationDto(
+public record PersonModificationDto(
     [Required]
     string FirstName,
     string MiddleName,
     [Required]
     string LastName,
-    [Required, StringLength(9)]
-    string Ssn,
+    [Required]
+    DateOnly BirthDate,
     [Required, EmailAddress]
     string Email,
     [Required, StringLength(10)]

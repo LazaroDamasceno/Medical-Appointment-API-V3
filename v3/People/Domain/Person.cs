@@ -44,7 +44,7 @@ public class Person
         return new Person(registrationDto);
     }
     
-    private void Modify(PersonModificationDto modificationDto)
+    public void Modify(PersonModificationDto modificationDto)
     {
         FirstName = modificationDto.FirstName;
         MiddleName = modificationDto.MiddleName;

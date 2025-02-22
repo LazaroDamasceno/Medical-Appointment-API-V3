@@ -10,6 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddSingleton<MongoDbContext>();
 builder.Services.AddSingleton<IPersonRegistrationService, PersonRegistrationService>();
+builder.Services.AddSingleton<IPersonModificationService, PersonModificationService>();
 
 var app = builder.Build();
 

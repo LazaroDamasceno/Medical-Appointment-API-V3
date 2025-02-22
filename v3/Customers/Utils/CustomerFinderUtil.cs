@@ -2,6 +2,7 @@
 using MongoDB.Driver;
 using v3.Context;
 using v3.Customers.Domain;
+using v3.Customers.Exceptions;
 
 namespace v3.Customers.Utils;
 

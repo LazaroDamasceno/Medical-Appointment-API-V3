@@ -2,8 +2,9 @@
 using v3.Context;
 using v3.People.Domain;
 using v3.People.DTOs;
+using v3.People.Services.Interfaces;
 
-namespace v3.People.Services;
+namespace v3.People.Services.Impl;
 
 public class PersonRegistrationService(MongoDbContext context) : IPersonRegistrationService
 {

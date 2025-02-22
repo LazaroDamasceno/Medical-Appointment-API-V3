@@ -7,6 +7,7 @@ using v3.Customers.DTOs;
 using v3.Customers.Services.Interfaces;
 using v3.Customers.Utils;
 using v3.People.Services;
+using v3.People.Services.Interfaces;
 
 namespace v3.Customers.Services.Impl;
 

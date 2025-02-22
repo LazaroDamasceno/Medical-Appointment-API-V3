@@ -8,6 +8,7 @@ using v3.Customers.Utils;
 using v3.People.Domain;
 using v3.People.Exceptions;
 using v3.People.Services;
+using v3.People.Services.Interfaces;
 
 namespace v3.Customers.Services.Impl;
 

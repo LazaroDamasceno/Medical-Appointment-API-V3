@@ -1,11 +1,12 @@
 ﻿using MongoDB.Driver;
+using v3.Customers.Domain;
 using v3.People.Domain;
 
 namespace v3.Context;
 
 public class MongoDbContext
 {
-    private IMongoDatabase Database { get; set; }
+    private IMongoDatabase Database { get; }
     
     private MongoDbContext(IConfiguration configuration)
     {
@@ -17,5 +18,5 @@ public class MongoDbContext
     
     public IMongoCollection<Person> PeopleCollection => Database.GetCollection<Person>("People");
     
-    public IMongoCollection<Person> CustomersCollection => Database.GetCollection<Person>("Customers");
+    public IMongoCollection<Customer> CustomersCollection => Database.GetCollection<Customer>("Customers");
 }

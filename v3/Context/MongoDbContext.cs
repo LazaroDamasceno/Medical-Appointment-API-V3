@@ -8,7 +8,7 @@ public class MongoDbContext
 {
     private IMongoDatabase Database { get; }
     
-    private MongoDbContext(IConfiguration configuration)
+    public MongoDbContext(IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("DbConnection");
         var mongoUrl = new MongoUrl(connectionString);

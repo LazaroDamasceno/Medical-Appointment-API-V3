@@ -6,7 +6,7 @@ namespace v3.Customers.Utils;
 
 public class CustomerResponseMapper
 {
-    public CustomerResponseDto Map(Customer customer)
+    public static CustomerResponseDto Map(Customer customer)
     {
         return new CustomerResponseDto(
             customer.Id.ToString(),

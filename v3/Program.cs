@@ -2,7 +2,8 @@ using v3.Context;
 using v3.Customers.Services.Impl;
 using v3.Customers.Services.Interfaces;
 using v3.Customers.Utils;
-using v3.People.Services;
+using v3.People.Services.Impl;
+using v3.People.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 

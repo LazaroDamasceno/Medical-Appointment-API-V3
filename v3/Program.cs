@@ -1,5 +1,6 @@
 using v3.Context;
-using v3.Customers.Services;
+using v3.Customers.Services.Impl;
+using v3.Customers.Services.Interfaces;
 using v3.Customers.Utils;
 using v3.People.Services;
 

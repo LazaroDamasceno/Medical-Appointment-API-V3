@@ -3,12 +3,13 @@ using MongoDB.Driver;
 using v3.Context;
 using v3.Customers.Domain;
 using v3.Customers.DTOs;
+using v3.Customers.Services.Interfaces;
 using v3.Customers.Utils;
 using v3.People.Domain;
 using v3.People.Exceptions;
 using v3.People.Services;
 
-namespace v3.Customers.Services;
+namespace v3.Customers.Services.Impl;
 
 public class CustomerRegistrationService(
     MongoDbContext context,
@@ -22,7 +23,7 @@ public class CustomerRegistrationService(
         var person = personRegistrationService.Create(registrationDto.PersonRegistrationDto);
         var customer = Customer.Create(registrationDto.Address, person);
         await context.CustomersCollection.InsertOneAsync(customer);
-        return CustomerResponseMapper.Map(customer);
+        return CustomerResponseMapper.MapToDto(customer);
     }
 
     private void OnDuplicatedSsn(string ssn)

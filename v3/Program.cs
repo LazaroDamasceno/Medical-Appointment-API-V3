@@ -1,3 +1,6 @@
+using v3.Context;
+using v3.People.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,6 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddSingleton<MongoDbContext>();
+builder.Services.AddSingleton<IPersonRegistrationService, PersonRegistrationService>();
 
 var app = builder.Build();
 

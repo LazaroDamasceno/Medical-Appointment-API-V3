@@ -1,4 +1,5 @@
 using v3.Context;
+using v3.Customers.Utils;
 using v3.People.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddSingleton<MongoDbContext>();
 builder.Services.AddSingleton<IPersonRegistrationService, PersonRegistrationService>();
 builder.Services.AddSingleton<IPersonModificationService, PersonModificationService>();
+builder.Services.AddSingleton<CustomerFinderUtil>();
 
 var app = builder.Build();
 

@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using v3.Common;
 
 namespace v3.Customers.DTOs;
 

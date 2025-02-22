@@ -16,6 +16,8 @@ builder.Services.AddSingleton<IPersonRegistrationService, PersonRegistrationServ
 builder.Services.AddSingleton<IPersonModificationService, PersonModificationService>();
 builder.Services.AddSingleton<CustomerFinderUtil>();
 builder.Services.AddSingleton<ICustomerRegistrationService, CustomerRegistrationService>();
+builder.Services.AddSingleton<ICustomerRetrievalService, CustomerRetrievalService>();
+builder.Services.AddSingleton<ICustomerModificationService, CustomerModificationService>();
 
 var app = builder.Build();
 

@@ -23,4 +23,10 @@ public class Customer
     {
         return new Customer(address, person);
     }
+
+    public void Modify(Person person, Address address)
+    {
+       Person = person;
+        Address = address;
+    }
 }

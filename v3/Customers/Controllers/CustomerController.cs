@@ -10,7 +10,8 @@ namespace v3.Customers.Controllers;
 [Route("api/v3/customers")]
 public class CustomerController(
     ICustomerRegistrationService registrationService,
-    ICustomerRetrievalService retrievalService
+    ICustomerRetrievalService retrievalService,
+    ICustomerModificationService modificationService
 ): ControllerBase {
     
     [HttpPost]
@@ -29,5 +30,10 @@ public class CustomerController(
     public Task<CustomerResponseDto> GetByIdAsync(string customerId)
     {
         return retrievalService.GetByIdAsync(customerId);
+    }
+
+    public Task ModifyAsync(string customerId, [Required] [FromBody] CustomerModificationDto modificationDto)
+    {
+        return modificationService.ModifyAsync(customerId, modificationDto);
     }
 }

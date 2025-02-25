@@ -6,5 +6,5 @@ namespace v3.People.Services.Interfaces;
 
 public interface IPersonRegistrationService
 {
-    Person Create(PersonRegistrationDto registrationDto);
+    Task<Person> Create(PersonRegistrationDto registrationDto);
 }

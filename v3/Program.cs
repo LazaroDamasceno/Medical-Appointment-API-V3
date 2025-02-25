@@ -14,11 +14,9 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddSingleton<MongoDbContext>();
 builder.Services.AddSingleton<IPersonRegistrationService, PersonRegistrationService>();
-builder.Services.AddSingleton<IPersonModificationService, PersonModificationService>();
 builder.Services.AddSingleton<CustomerFinderUtil>();
 builder.Services.AddSingleton<ICustomerRegistrationService, CustomerRegistrationService>();
 builder.Services.AddSingleton<ICustomerRetrievalService, CustomerRetrievalService>();
-builder.Services.AddSingleton<ICustomerModificationService, CustomerModificationService>();
 
 var app = builder.Build();
 

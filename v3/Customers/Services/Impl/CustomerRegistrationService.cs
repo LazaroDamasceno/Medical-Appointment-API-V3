@@ -21,7 +21,7 @@ public class CustomerRegistrationService(
     {
         OnDuplicatedSsn(registrationDto.PersonRegistrationDto.Ssn);
         OnDuplicatedEmail(registrationDto.PersonRegistrationDto.Email);
-        var person = personRegistrationService.Create(registrationDto.PersonRegistrationDto);
+        var person = personRegistrationService.Create(registrationDto.PersonRegistrationDto).Result;
         var customer = Customer.Create(registrationDto.Address, person);
         await context.CustomersCollection.InsertOneAsync(customer);
         return CustomerResponseMapper.MapToDto(customer);

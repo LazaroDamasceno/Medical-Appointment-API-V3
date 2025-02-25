@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using v3.Customers.DTOs;
-using v3.Customers.Services;
 using v3.Customers.Services.Interfaces;
 
 namespace v3.Customers.Controllers;
@@ -10,30 +9,25 @@ namespace v3.Customers.Controllers;
 [Route("api/v3/customers")]
 public class CustomerController(
     ICustomerRegistrationService registrationService,
-    ICustomerRetrievalService retrievalService,
-    ICustomerModificationService modificationService
+    ICustomerRetrievalService retrievalService
 ): ControllerBase {
     
     [HttpPost]
-    public Task<CustomerResponseDto> Create([Required] [FromBody] CustomerRegistrationDto registrationDto)
+    public async Task<ActionResult<CustomerResponseDto>> Create([Required] [FromBody] CustomerRegistrationDto registrationDto)
     {
-        return registrationService.Create(registrationDto);
+        var response = await registrationService.Create(registrationDto);
+        return StatusCode(201, response);
     }
 
     [HttpGet]
-    public Task<List<CustomerResponseDto>> GetAllAsync()
+    public async Task<List<CustomerResponseDto>> GetAllAsync()
     {
-        return retrievalService.GetAllAsync();
+        return await retrievalService.GetAllAsync();
     }
 
     [HttpGet("{customerId}")]
-    public Task<CustomerResponseDto> GetByIdAsync(string customerId)
+    public async Task<CustomerResponseDto> GetByIdAsync(string customerId)
     {
-        return retrievalService.GetByIdAsync(customerId);
-    }
-
-    public Task ModifyAsync(string customerId, [Required] [FromBody] CustomerModificationDto modificationDto)
-    {
-        return modificationService.ModifyAsync(customerId, modificationDto);
+        return await retrievalService.GetByIdAsync(customerId);
     }
 }

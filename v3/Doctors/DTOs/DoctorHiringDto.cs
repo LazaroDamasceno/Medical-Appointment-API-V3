@@ -1,8 +1,9 @@
-﻿using v3.People.DTOs;
+﻿using System.ComponentModel.DataAnnotations;
+using v3.People.DTOs;
 
 namespace v3.Doctors.DTOs;
 
 public record DoctorHiringDto(
-    string MedicalLicenseNumber,
-    PersonRegistrationDto PersonRegistrationDto
+    [Required] string MedicalLicenseNumber,
+    [Required] PersonRegistrationDto PersonRegistrationDto
 );

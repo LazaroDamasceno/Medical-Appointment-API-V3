@@ -1,5 +1,6 @@
 ﻿using MongoDB.Driver;
 using v3.Customers.Domain;
+using v3.Doctors.Domain;
 using v3.People.Domain;
 
 namespace v3.Context;
@@ -19,4 +20,7 @@ public class MongoDbContext
     public IMongoCollection<Person> PeopleCollection => Database.GetCollection<Person>("People");
     
     public IMongoCollection<Customer> CustomersCollection => Database.GetCollection<Customer>("Customers");
+    
+    public IMongoCollection<Doctor> DoctorsCollection => Database.GetCollection<Doctor>("Doctors");
+    
 }

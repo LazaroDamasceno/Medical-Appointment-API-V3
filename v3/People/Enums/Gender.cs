@@ -2,8 +2,10 @@
 
 public enum Gender
 {
-    Male,
-    Female, 
+    CisMale,
+    CisFemale, 
+    TransMale,
+    TransFemale,
     Queer,
     NonBinary,
     Other

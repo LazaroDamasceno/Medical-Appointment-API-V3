@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using v3.People.DTOs;
+using v3.People.Enums;
 
 namespace v3.People.Domain;
 
@@ -12,11 +13,11 @@ public class Person
     private string FirstName { get; set; }
     private string MiddleName { get; set; }
     private string LastName { get; set; }
-    public DateOnly BirthDate { get; set; }
+    public DateOnly BirthDate { get; private set; }
     public string Ssn { get; private set; }
     public string Email { get; private set; }
     public string PhoneNumber { get; private set; }
-    public string Gender { get; private set; }
+    public Gender Gender { get; private set; }
 
     public string FullName()
     {
@@ -42,16 +43,5 @@ public class Person
     public static Person Create(PersonRegistrationDto registrationDto)
     {
         return new Person(registrationDto);
-    }
-    
-    public void Modify(PersonModificationDto modificationDto)
-    {
-        FirstName = modificationDto.FirstName;
-        MiddleName = modificationDto.MiddleName;
-        LastName = modificationDto.LastName;
-        BirthDate = modificationDto.BirthDate;
-        Email = modificationDto.Email;
-        PhoneNumber = modificationDto.PhoneNumber;
-        Gender = modificationDto.Gender;
     }
 }

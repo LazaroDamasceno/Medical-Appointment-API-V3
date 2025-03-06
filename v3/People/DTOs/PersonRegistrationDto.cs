@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using v3.People.Enums;
 
 namespace v3.People.DTOs;
 
@@ -16,6 +17,6 @@ public record PersonRegistrationDto(
     string Email,
     [Required, StringLength(10)]
     string PhoneNumber,
-    [Required, MinLength(1)]
-    string Gender
+    [Required]
+    Gender Gender
 );

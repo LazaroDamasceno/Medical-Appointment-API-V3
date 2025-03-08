@@ -12,7 +12,7 @@ public class DoctorTerminationService(
     DoctorFinderUtil doctorFinderUtil
 ): IDoctorTerminationService
 {
-    public async Task Terminated(string medicalLicenseNumber)
+    public async Task Terminate(string medicalLicenseNumber)
     {
         var doctor = await doctorFinderUtil.FindByMedicalLicenceNumber(medicalLicenseNumber);
         OnActiveDoctor(doctor);

@@ -2,5 +2,5 @@
 
 public interface IDoctorTerminationService
 {
-    Task Terminated(string medicalLicenseNumber);
+    Task Terminate(string medicalLicenseNumber);
 }

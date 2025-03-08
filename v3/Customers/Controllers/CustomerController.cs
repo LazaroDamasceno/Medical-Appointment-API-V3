@@ -13,10 +13,9 @@ public class CustomerController(
 ): ControllerBase {
     
     [HttpPost]
-    public async Task<ActionResult<CustomerResponseDto>> Create([Required] [FromBody] CustomerRegistrationDto registrationDto)
+    public async Task<CustomerResponseDto> Create([Required] [FromBody] CustomerRegistrationDto registrationDto)
     {
-        var response = await registrationService.Create(registrationDto);
-        return StatusCode(201, response);
+        return await registrationService.Create(registrationDto);
     }
 
     [HttpGet]

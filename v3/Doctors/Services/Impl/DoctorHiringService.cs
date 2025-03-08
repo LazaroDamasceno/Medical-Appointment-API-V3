@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using System.ComponentModel.DataAnnotations;
+using MongoDB.Driver;
 using v3.Context;
 using v3.Doctors.Domain;
 using v3.Doctors.DTOs;
@@ -17,35 +18,23 @@ public class DoctorHiringService(
 ): IDoctorHiringService
 {
     
-    public async Task<DoctorResponseDto> Hire(DoctorHiringDto hiringDto)
+    public async Task<DoctorResponseDto> Hire([Required] DoctorHiringDto hiringDto)
     {
-        OnDuplicatedSsn(hiringDto.PersonRegistrationDto.Ssn);
-        OnDuplicatedEmail(hiringDto.PersonRegistrationDto.Email);
-        OnDuplicatedMedicalLicenseNumber(hiringDto.MedicalLicenseNumber);
+        var ssnFilter = Builders<Person>.Filter.Eq(p => p.Ssn, hiringDto.PersonRegistrationDto.Ssn);
+        var isSsnDuplicated = await context.PeopleCollection.FindAsync(ssnFilter).Result.AnyAsync();
+        if (isSsnDuplicated) throw new DuplicatedSsnException();
+        
+        var emailFilter = Builders<Person>.Filter.Eq(p => p.Email, hiringDto.PersonRegistrationDto.Email);
+        var isEmailDuplicated = await context.PeopleCollection.FindAsync(emailFilter).Result.AnyAsync();
+        if (isEmailDuplicated) throw new DuplicatedEmailException();
+        
+        var medicalLicenseNumberFilter = Builders<Doctor>.Filter.Eq(p => p.MedicalLicenseNumber, hiringDto.MedicalLicenseNumber);
+        var isMedicalLicenseNumberDuplicated = await context.DoctorsCollection.FindAsync(medicalLicenseNumberFilter).Result.AnyAsync();
+        if (isMedicalLicenseNumberDuplicated) throw new DuplicatedMedicalLicenseNumberException();
+        
         var person = await personRegistrationService.Create(hiringDto.PersonRegistrationDto);
         var doctor = Doctor.Create(hiringDto.MedicalLicenseNumber, person);
         await context.DoctorsCollection.InsertOneAsync(doctor);
         return DoctorResponseMapper.Map(doctor);
-    }
-    
-    private void OnDuplicatedSsn(string ssn)
-    {
-        var filter = Builders<Person>.Filter.Eq(p => p.Ssn, ssn);
-        var isDuplicated = context.PeopleCollection.Find(filter).Any();
-        if (isDuplicated) throw new DuplicatedSsnException();
-    }
-    
-    private void OnDuplicatedEmail(string email)
-    {
-        var filter = Builders<Person>.Filter.Eq(p => p.Email, email);
-        var isDuplicated = context.PeopleCollection.Find(filter).Any();
-        if (isDuplicated) throw new DuplicatedEmailException();
-    }
-
-    private void OnDuplicatedMedicalLicenseNumber(string medicalLicenseNumber)
-    {
-        var filter = Builders<Doctor>.Filter.Eq(p => p.MedicalLicenseNumber, medicalLicenseNumber);
-        var isDuplicated = context.DoctorsCollection.Find(filter).Any();
-        if (isDuplicated) throw new DuplicatedMedicalLicenseNumberException();
     }
 }

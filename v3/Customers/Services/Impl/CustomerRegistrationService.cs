@@ -7,7 +7,6 @@ using v3.Customers.Services.Interfaces;
 using v3.Customers.Utils;
 using v3.People.Domain;
 using v3.People.Exceptions;
-using v3.People.Services;
 using v3.People.Services.Interfaces;
 
 namespace v3.Customers.Services.Impl;
@@ -19,25 +18,17 @@ public class CustomerRegistrationService(
     
     public async Task<CustomerResponseDto> Create([Required] CustomerRegistrationDto registrationDto)
     {
-        OnDuplicatedSsn(registrationDto.PersonRegistrationDto.Ssn);
-        OnDuplicatedEmail(registrationDto.PersonRegistrationDto.Email);
+        var ssnFilter = Builders<Person>.Filter.Eq(p => p.Ssn, registrationDto.PersonRegistrationDto.Ssn);
+        var isSsnDuplicated = await context.PeopleCollection.FindAsync(ssnFilter).Result.AnyAsync();
+        if (isSsnDuplicated) throw new DuplicatedSsnException();
+        
+        var emailFilter = Builders<Person>.Filter.Eq(p => p.Email, registrationDto.PersonRegistrationDto.Email);
+        var isEmailDuplicated = await context.PeopleCollection.FindAsync(emailFilter).Result.AnyAsync();
+        if (isEmailDuplicated) throw new DuplicatedEmailException();
+        
         var person = personRegistrationService.Create(registrationDto.PersonRegistrationDto).Result;
         var customer = Customer.Create(registrationDto.Address, person);
         await context.CustomersCollection.InsertOneAsync(customer);
         return CustomerResponseMapper.MapToDto(customer);
-    }
-
-    private void OnDuplicatedSsn(string ssn)
-    {
-        var filter = Builders<Person>.Filter.Eq(p => p.Ssn, ssn);
-        var isDuplicated = context.PeopleCollection.Find(filter).Any();
-        if (isDuplicated) throw new DuplicatedSsnException();
-    }
-    
-    private void OnDuplicatedEmail(string email)
-    {
-        var filter = Builders<Person>.Filter.Eq(p => p.Email, email);
-        var isDuplicated = context.PeopleCollection.Find(filter).Any();
-        if (isDuplicated) throw new DuplicatedEmailException();
     }
 }

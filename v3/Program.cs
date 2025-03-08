@@ -22,6 +22,9 @@ builder.Services.AddSingleton<ICustomerRegistrationService, CustomerRegistration
 builder.Services.AddSingleton<ICustomerRetrievalService, CustomerRetrievalService>();
 builder.Services.AddSingleton<DoctorFinderUtil>();
 builder.Services.AddSingleton<IDoctorHiringService, DoctorHiringService>();
+builder.Services.AddSingleton<IDoctorRehiringService, DoctorRehiringService>();
+builder.Services.AddSingleton<IDoctorTerminationService, DoctorTerminationService>();
+builder.Services.AddSingleton<IDoctorRetrievalService, DoctorRetrievalService>();
 
 var app = builder.Build();
 

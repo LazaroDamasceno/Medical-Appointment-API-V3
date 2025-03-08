@@ -7,25 +7,25 @@ using v3.Doctors.Utils;
 
 namespace v3.Doctors.Services.Impl;
 
-public class DoctorRehiringService(
-    MongoDbContext context,
+public class DoctorTerminationService(    
+    MongoDbContext context, 
     DoctorFinderUtil doctorFinderUtil
-): IDoctorRehiringService
+): IDoctorTerminationService
 {
-    public async Task Rehire(string medicalLicenseNumber)
+    public async Task Terminated(string medicalLicenseNumber)
     {
         var doctor = await doctorFinderUtil.FindByMedicalLicenceNumber(medicalLicenseNumber);
-        OnTerminatedDoctor(doctor);
+        OnActiveDoctor(doctor);
         var filter = Builders<Doctor>.Filter.Eq(x => x.MedicalLicenseNumber, doctor.MedicalLicenseNumber);
-        var update = Builders<Doctor>.Update.Set(x => x.TerminatedAt, DateTime.UtcNow);
+        var update = Builders<Doctor>.Update.Set(x => x.TerminatedAt, null);
         await context.DoctorsCollection.UpdateOneAsync(filter, update);
     }
-
-    private void OnTerminatedDoctor(Doctor doctor)
+    
+    private void OnActiveDoctor(Doctor doctor)
     {
-        if (doctor.TerminatedAt != null)
+        if (doctor.TerminatedAt == null)
         {
-            const string message = "Doctor cannot be terminated, because they're already terminated.";
+            const string message = "Doctor cannot be rehired, because they're already active.";
             throw new ImmutableDoctorException(message);
         }
     }

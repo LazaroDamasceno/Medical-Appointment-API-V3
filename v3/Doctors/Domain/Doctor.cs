@@ -9,6 +9,8 @@ public class Doctor
     public ObjectId Id { get; private set; } = ObjectId.GenerateNewId();
     public string MedicalLicenseNumber { get; private set; }
     public Person Person { get; private set; }
+    public DateTime HiredAt { get; private set; } = DateTime.UtcNow;
+    public DateTime? TerminatedAt { get; private set; }
 
     private Doctor(string medicalLicenseNumber, Person person)
     {

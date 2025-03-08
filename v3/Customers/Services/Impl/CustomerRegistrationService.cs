@@ -30,14 +30,14 @@ public class CustomerRegistrationService(
     private void OnDuplicatedSsn(string ssn)
     {
         var filter = Builders<Person>.Filter.Eq(p => p.Ssn, ssn);
-        var result = context.PeopleCollection.Find(filter).Any();
-        if (result) throw new DuplicatedEmailException();
+        var isDuplicated = context.PeopleCollection.Find(filter).Any();
+        if (isDuplicated) throw new DuplicatedSsnException();
     }
     
     private void OnDuplicatedEmail(string email)
     {
         var filter = Builders<Person>.Filter.Eq(p => p.Email, email);
-        var result = context.PeopleCollection.Find(filter).Any();
-        if (result) throw new DuplicatedEmailException();
+        var isDuplicated = context.PeopleCollection.Find(filter).Any();
+        if (isDuplicated) throw new DuplicatedEmailException();
     }
 }

@@ -3,7 +3,7 @@ using v3.Doctors.DTOs;
 
 namespace v3.Doctors.Utils;
 
-public class DoctorResponseMapper
+public static class DoctorResponseMapper
 {
     public static DoctorResponseDto Map(Doctor doctor)
     {

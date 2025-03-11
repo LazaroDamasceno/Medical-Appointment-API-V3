@@ -4,7 +4,7 @@ using v3.Customers.DTOs;
 
 namespace v3.Customers.Utils;
 
-public class CustomerResponseMapper
+public static class CustomerResponseMapper
 {
     
     public static CustomerResponseDto MapToDto(Customer customer)

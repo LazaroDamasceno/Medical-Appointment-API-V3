@@ -1,5 +1,4 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson.Serialization.Attributes;
 using v3.People.DTOs;
 using v3.People.Enums;
 
@@ -9,7 +8,7 @@ public class Person
 {
 
     [BsonId] 
-    public ObjectId Id { get; private set; } = ObjectId.GenerateNewId();
+    public Guid Id { get; private set; } = Guid.NewGuid();
     private string FirstName { get; set; }
     private string MiddleName { get; set; }
     private string LastName { get; set; }
@@ -18,6 +17,7 @@ public class Person
     public string Email { get; private set; }
     public string PhoneNumber { get; private set; }
     public Gender Gender { get; private set; }
+    public DateTime CreatedAt { get; private set; } = DateTime.Now;
 
     public string FullName()
     {

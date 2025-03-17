@@ -23,4 +23,6 @@ public class MongoDbContext
     
     public IMongoCollection<Doctor> DoctorsCollection => Database.GetCollection<Doctor>("Doctors");
     
+    public IMongoCollection<DoctorAuditTrail> DoctorAuditTrailCollection => Database.GetCollection<DoctorAuditTrail>("DoctorAuditTrail");
+    
 }

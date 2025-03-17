@@ -1,4 +1,4 @@
-﻿using MongoDB.Bson;
+﻿using MongoDB.Bson.Serialization.Attributes;
 using v3.People.Domain;
 
 namespace v3.Doctors.Domain;
@@ -6,7 +6,7 @@ namespace v3.Doctors.Domain;
 public class Doctor
 {
 
-    public ObjectId Id { get; private set; } = ObjectId.GenerateNewId();
+    [BsonId] public Guid Id { get; private set; } = Guid.NewGuid();
     public string MedicalLicenseNumber { get; private set; }
     public Person Person { get; private set; }
     public DateTime HiredAt { get; private set; } = DateTime.UtcNow;
@@ -22,4 +22,8 @@ public class Doctor
     {
         return new Doctor(medicalLicenseNumber, person);
     }
+
+    public void MarkAsTerminated() => TerminatedAt = DateTime.Now;
+
+    public void MarkAsHired() => TerminatedAt = null;
 }

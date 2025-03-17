@@ -10,7 +10,7 @@ public class CustomerFinderUtil(MongoDbContext context)
 {
     public async Task<Customer> FindByIdAsync(string customerId)
     {
-        var filter = Builders<Customer>.Filter.Eq(x => x.Id, new ObjectId(customerId));
+        var filter = Builders<Customer>.Filter.Eq(x => x.Id, Guid.Parse(customerId));
         var foundCustomer = await context
             .CustomersCollection
             .FindAsync(filter)

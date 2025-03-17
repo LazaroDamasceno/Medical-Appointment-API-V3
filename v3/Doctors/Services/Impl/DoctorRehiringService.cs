@@ -19,9 +19,12 @@ public class DoctorRehiringService(
         var filter = Builders<Doctor>.Filter.Eq(x => x.MedicalLicenseNumber, doctor.MedicalLicenseNumber);
         var update = Builders<Doctor>.Update.Set(x => x.TerminatedAt, DateTime.UtcNow);
         await context.DoctorsCollection.UpdateOneAsync(filter, update);
+        
+        var doctorAuditTrail = DoctorAuditTrail.Create(doctor);
+        await context.DoctorAuditTrailCollection.InsertOneAsync(doctorAuditTrail);
     }
 
-    private void OnTerminatedDoctor(Doctor doctor)
+    private static void OnTerminatedDoctor(Doctor doctor)
     {
         if (doctor.TerminatedAt != null)
         {

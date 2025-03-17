@@ -8,8 +8,8 @@ public static class DoctorResponseMapper
     public static DoctorResponseDto Map(Doctor doctor)
     {
         return new DoctorResponseDto(
-            doctor.MedicalLicenseNumber,
-            doctor.Person.FullName()
+            doctor.Person.FullName(),
+            doctor.MedicalLicenseNumber
         );
     }
 }

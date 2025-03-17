@@ -1,6 +1,7 @@
 ﻿using MongoDB.Driver;
 using v3.Customers.Domain;
 using v3.Doctors.Domain;
+using v3.MedicalSlots.Domain;
 using v3.People.Domain;
 
 namespace v3.Context;
@@ -24,5 +25,7 @@ public class MongoDbContext
     public IMongoCollection<Doctor> DoctorsCollection => Database.GetCollection<Doctor>("Doctors");
     
     public IMongoCollection<DoctorAuditTrail> DoctorAuditTrailCollection => Database.GetCollection<DoctorAuditTrail>("DoctorAuditTrail");
-    
+
+    public IMongoCollection<MedicalSlot> MedicalSlotCollection => Database.GetCollection<MedicalSlot>("MedicalSlots");
+
 }

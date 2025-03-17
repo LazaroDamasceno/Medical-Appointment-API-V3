@@ -19,9 +19,12 @@ public class DoctorTerminationService(
         var filter = Builders<Doctor>.Filter.Eq(x => x.MedicalLicenseNumber, doctor.MedicalLicenseNumber);
         var update = Builders<Doctor>.Update.Set(x => x.TerminatedAt, null);
         await context.DoctorsCollection.UpdateOneAsync(filter, update);
+        
+        var doctorAuditTrail = DoctorAuditTrail.Create(doctor);
+        await context.DoctorAuditTrailCollection.InsertOneAsync(doctorAuditTrail);
     }
     
-    private void OnActiveDoctor(Doctor doctor)
+    private static void OnActiveDoctor(Doctor doctor)
     {
         if (doctor.TerminatedAt == null)
         {

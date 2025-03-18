@@ -1,6 +1,7 @@
 ﻿using MongoDB.Driver;
 using v3.Context;
 using v3.MedicalSlots.Domain;
+using v3.MedicalSlots.Exceptions;
 
 namespace v3.MedicalSlots.Utils;
 

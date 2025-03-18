@@ -6,6 +6,7 @@ namespace v3.MedicalSlots.Utils;
 
 public static class MedicalSlotResponseMapper
 {
+
     public static MedicalSlotResponseDto Map(MedicalSlot medicalSlot)
     {
         return new MedicalSlotResponseDto(

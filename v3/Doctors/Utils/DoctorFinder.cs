@@ -7,10 +7,11 @@ namespace v3.Doctors.Utils;
 
 public class DoctorFinder(MongoDbContext context)
 {
+    
     public async Task<Doctor> FindByMedicalLicenceNumber(string medicalLicenceNumber)
     {
         var filter = Builders<Doctor>.Filter.Eq(x => x.MedicalLicenseNumber, medicalLicenceNumber);
-        var doctor = await context.DoctorsCollection.FindAsync(filter).Result.FirstOrDefaultAsync();
+        var doctor = await context.DoctorsCollection.Find(filter).FirstOrDefaultAsync();
         if (doctor == null) throw new NonExistentDoctorException(medicalLicenceNumber);
         return doctor;
     }

@@ -1,5 +1,6 @@
 ﻿using MongoDB.Driver;
 using v3.Context;
+using v3.Doctors.Domain;
 using v3.Doctors.Utils;
 using v3.MedicalSlots.Domain;
 using v3.MedicalSlots.Exceptions;
@@ -20,10 +21,10 @@ public class MedicalSlotCancellationService(
         var doctor = await doctorFinder.FindByMedicalLicenceNumber(medicalLicenseNumber);
         var medialSlot = await medicalSlotFinder.FindById(medicalSlotId);
         
-        var filter = Builders<MedicalSlot>.Filter.Eq(x => x.Id, doctor.Id);
+        var doctorFilter = Builders<MedicalSlot>.Filter.Eq(x => x.Id, doctor.Id);
         var isDoctorNotAssociatedWithMedicalSlot = !await context
             .MedicalSlotCollection
-            .FindAsync(filter)
+            .FindAsync(doctorFilter)
             .Result
             .AnyAsync();
         if (isDoctorNotAssociatedWithMedicalSlot)
@@ -32,13 +33,13 @@ public class MedicalSlotCancellationService(
             throw new InaccessibleMedicalSlotException(medicalLicenseNumber);
         }
         
-        filter = Builders<MedicalSlot>.Filter.Eq(x => x.Id, doctor.Id) &
+        var canceledMedicalSlotFilter = Builders<MedicalSlot>.Filter.Eq(x => x.Id, doctor.Id) &
                  Builders<MedicalSlot>.Filter.Eq(x => x.AvailableAt, medialSlot.AvailableAt) &
                  Builders<MedicalSlot>.Filter.Eq(x => x.CanceledAt != null, true) &
                  Builders<MedicalSlot>.Filter.Eq(x => x.CompletedAt == null, true);
         var isMedicalSlotCanceled = !await context
             .MedicalSlotCollection
-            .FindAsync(filter)
+            .FindAsync(canceledMedicalSlotFilter)
             .Result
             .AnyAsync();
         if (isMedicalSlotCanceled)
@@ -47,13 +48,13 @@ public class MedicalSlotCancellationService(
             throw new ImmutableMedicalSlotException(message);
         }
         
-        filter = Builders<MedicalSlot>.Filter.Eq(x => x.Id, doctor.Id) &
-                 Builders<MedicalSlot>.Filter.Eq(x => x.AvailableAt, medialSlot.AvailableAt) &
-                 Builders<MedicalSlot>.Filter.Eq(x => x.CanceledAt == null, true) &
-                 Builders<MedicalSlot>.Filter.Eq(x => x.CompletedAt != null, true);
+        var completedMedicalSlotFilter = Builders<MedicalSlot>.Filter.Eq(x => x.Id, doctor.Id) &
+                                        Builders<MedicalSlot>.Filter.Eq(x => x.AvailableAt, medialSlot.AvailableAt) &
+                                        Builders<MedicalSlot>.Filter.Eq(x => x.CanceledAt == null, true) &
+                                        Builders<MedicalSlot>.Filter.Eq(x => x.CompletedAt != null, true);
         var isMedicalSlotCompleted = !await context
             .MedicalSlotCollection
-            .FindAsync(filter)
+            .FindAsync(completedMedicalSlotFilter)
             .Result
             .AnyAsync();
         if (isMedicalSlotCompleted)
@@ -62,8 +63,7 @@ public class MedicalSlotCancellationService(
             throw new ImmutableMedicalSlotException(message);
         }
         
-        filter = Builders<MedicalSlot>.Filter.Eq(x => x.Id, doctor.Id);
         var update = Builders<MedicalSlot>.Update.Set(x => x.CanceledAt, DateTime.Now);
-        await context.MedicalSlotCollection.UpdateOneAsync(filter, update);
+        await context.MedicalSlotCollection.UpdateOneAsync(doctorFilter, update);
     }
 }

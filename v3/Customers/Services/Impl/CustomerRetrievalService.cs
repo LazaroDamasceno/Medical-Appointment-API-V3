@@ -8,7 +8,7 @@ namespace v3.Customers.Services.Impl;
 
 public class CustomerRetrievalService(
     MongoDbContext context,
-    CustomerFinderUtil customerFinderUtil
+    CustomerFinder customerFinder
 ): ICustomerRetrievalService {
     
     public async Task<List<CustomerResponseDto>> GetAllAsync()
@@ -23,7 +23,7 @@ public class CustomerRetrievalService(
 
     public async Task<CustomerResponseDto> GetByIdAsync(string customerId)
     {
-        var foundCustomer = await customerFinderUtil.FindByIdAsync(customerId);
+        var foundCustomer = await customerFinder.FindByIdAsync(customerId);
         return CustomerResponseMapper.MapToDto(foundCustomer);
     }
 }

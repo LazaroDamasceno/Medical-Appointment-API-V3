@@ -6,7 +6,7 @@ using v3.Customers.Exceptions;
 
 namespace v3.Customers.Utils;
 
-public class CustomerFinderUtil(MongoDbContext context)
+public class CustomerFinder(MongoDbContext context)
 {
     public async Task<Customer> FindByIdAsync(string customerId)
     {

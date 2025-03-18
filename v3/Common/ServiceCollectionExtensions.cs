@@ -5,6 +5,7 @@ using v3.Customers.Utils;
 using v3.Doctors.Services.Impl;
 using v3.Doctors.Services.Interfaces;
 using v3.Doctors.Utils;
+using v3.MedicalSlots.Services.Interfaces;
 using v3.MedicalSlots.Utils;
 using v3.People.Services.Impl;
 using v3.People.Services.Interfaces;
@@ -17,15 +18,16 @@ public static class ServiceCollectionExtensions
     {
         services.AddSingleton<MongoDbContext>();
         services.AddSingleton<IPersonRegistrationService, PersonRegistrationService>();
-        services.AddSingleton<CustomerFinderUtil>();
+        services.AddSingleton<CustomerFinder>();
         services.AddSingleton<ICustomerRegistrationService, CustomerRegistrationService>();
         services.AddSingleton<ICustomerRetrievalService, CustomerRetrievalService>();
-        services.AddSingleton<DoctorFinderUtil>();
+        services.AddSingleton<DoctorFinder>();
         services.AddSingleton<IDoctorHiringService, DoctorHiringService>();
         services.AddSingleton<IDoctorRehiringService, DoctorRehiringService>();
         services.AddSingleton<IDoctorTerminationService, DoctorTerminationService>();
         services.AddSingleton<IDoctorRetrievalService, DoctorRetrievalService>();
         services.AddSingleton<MedicalSlotFinder>();
+        services.AddSingleton<IMedicalSlotRegistrationService, MedicalSlotRegistrationService>();
         return services;
     }
 }

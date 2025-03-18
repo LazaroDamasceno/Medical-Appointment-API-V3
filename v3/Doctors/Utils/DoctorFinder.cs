@@ -5,7 +5,7 @@ using v3.Doctors.Exceptions;
 
 namespace v3.Doctors.Utils;
 
-public class DoctorFinderUtil(MongoDbContext context)
+public class DoctorFinder(MongoDbContext context)
 {
     public async Task<Doctor> FindByMedicalLicenceNumber(string medicalLicenceNumber)
     {

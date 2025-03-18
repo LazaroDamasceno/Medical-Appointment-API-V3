@@ -8,7 +8,7 @@ namespace v3.Doctors.Services.Impl;
 
 public class DoctorRetrievalService(
     MongoDbContext context,
-    DoctorFinderUtil doctorFinderUtil
+    DoctorFinder doctorFinder
 ): IDoctorRetrievalService
 {
     
@@ -24,7 +24,7 @@ public class DoctorRetrievalService(
 
     public async Task<DoctorResponseDto> GetByMedicalLicenseNumber(string medicalLicenseNumber)
     {
-        var doctor = await doctorFinderUtil.FindByMedicalLicenceNumber(medicalLicenseNumber);
+        var doctor = await doctorFinder.FindByMedicalLicenceNumber(medicalLicenseNumber);
         return DoctorResponseMapper.Map(doctor);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using MongoDB.Driver;
+using v3.Common;
 using v3.Context;
 using v3.Customers.Domain;
 using v3.Customers.DTOs;
@@ -13,18 +14,17 @@ namespace v3.Customers.Services.Impl;
 
 public class CustomerRegistrationService(
     MongoDbContext context,
-    IPersonRegistrationService personRegistrationService
+    IPersonRegistrationService personRegistrationService,
+    PersonalDataChecker personalDataChecker
 ): ICustomerRegistrationService {
     
     public async Task<CustomerResponseDto> Create([Required] CustomerRegistrationDto registrationDto)
     {
-        var ssnFilter = Builders<Person>.Filter.Eq(p => p.Ssn, registrationDto.PersonRegistrationDto.Ssn);
-        var isSsnDuplicated = await context.PeopleCollection.FindAsync(ssnFilter).Result.AnyAsync();
-        if (isSsnDuplicated) throw new DuplicatedSsnException();
+        var ssn = registrationDto.PersonRegistrationDto.Ssn;
+        if (await personalDataChecker.IsSsnDuplicated(ssn)) throw new DuplicatedSsnException();
         
-        var emailFilter = Builders<Person>.Filter.Eq(p => p.Email, registrationDto.PersonRegistrationDto.Email);
-        var isEmailDuplicated = await context.PeopleCollection.FindAsync(emailFilter).Result.AnyAsync();
-        if (isEmailDuplicated) throw new DuplicatedEmailException();
+        var email = registrationDto.PersonRegistrationDto.Email;
+        if (await personalDataChecker.IsEmailDuplicated(ssn)) throw new DuplicatedEmailException();
         
         var person = personRegistrationService.Create(registrationDto.PersonRegistrationDto).Result;
         var customer = Customer.Create(registrationDto.Address, person);

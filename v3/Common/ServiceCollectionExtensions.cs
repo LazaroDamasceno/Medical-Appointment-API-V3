@@ -5,6 +5,7 @@ using v3.Customers.Utils;
 using v3.Doctors.Services.Impl;
 using v3.Doctors.Services.Interfaces;
 using v3.Doctors.Utils;
+using v3.MedicalSlots.Services.Impl;
 using v3.MedicalSlots.Services.Interfaces;
 using v3.MedicalSlots.Utils;
 using v3.People.Services.Impl;
@@ -28,6 +29,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IDoctorRetrievalService, DoctorRetrievalService>();
         services.AddSingleton<MedicalSlotFinder>();
         services.AddSingleton<IMedicalSlotRegistrationService, MedicalSlotRegistrationService>();
+        services.AddSingleton<IMedicalSlotCancellationService, MedicalSlotCancellationService>();
         return services;
     }
 }

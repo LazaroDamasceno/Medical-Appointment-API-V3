@@ -24,8 +24,4 @@ public class MedicalSlot
     {
         return new MedicalSlot(doctor, availableAt);
     }
-    
-    public void MarkAsCanceled() => CanceledAt = DateTime.Now;
-    
-    public void MarkAsCompleted() => CompletedAt = DateTime.Now;
 }

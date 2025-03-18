@@ -5,9 +5,10 @@ using v3.Context;
 using v3.Doctors.Utils;
 using v3.MedicalSlots.Domain;
 using v3.MedicalSlots.DTOs;
+using v3.MedicalSlots.Services.Interfaces;
 using v3.MedicalSlots.Utils;
 
-namespace v3.MedicalSlots.Services.Interfaces;
+namespace v3.MedicalSlots.Services.Impl;
 
 public class MedicalSlotRegistrationService(
     MongoDbContext context,

@@ -15,8 +15,7 @@ public class CustomerRetrievalService(
     {
         var allCustomers = await context
             .CustomersCollection
-            .FindAsync(_ => true)
-            .Result
+            .Find(_ => true)
             .ToListAsync();
         return CustomerResponseMapper.MapToList(allCustomers);
     }

@@ -19,17 +19,20 @@ public class MedicalSlotRegistrationService(
     public async Task<MedicalSlotResponseDto> Register([Required] MedicalSlotRegistrationDto registrationDto)
     {
         var doctor = await doctorFinder.FindByMedicalLicenceNumber(registrationDto.MedicalLicenseNumber);
-
-        if (await IsBookingDateTimeUnavailable(doctor.Id, registrationDto.AvailableAt))
-        {
-            throw new UnavaialbleBookingDateTimeException();
-        }
-
-        PastDateTimeHandler.Handle(registrationDto.AvailableAt);
-        
+        await ValidateRegistration(doctor.Id, registrationDto.AvailableAt);
         var medicalSlot = MedicalSlot.Create(doctor, registrationDto.AvailableAt);
         await context.MedicalSlotCollection.InsertOneAsync(medicalSlot);
         return MedicalSlotResponseMapper.Map(medicalSlot);
+    }
+
+    private async Task ValidateRegistration(Guid doctorId, DateTime availableAt)
+    {
+        PastDateTimeHandler.Handle(availableAt);
+        
+        if (await IsBookingDateTimeUnavailable(doctorId, availableAt))
+        {
+            throw new UnavaialbleBookingDateTimeException();
+        }
     }
 
     private async Task<bool> IsBookingDateTimeUnavailable(Guid doctorId, DateTime availableAt)

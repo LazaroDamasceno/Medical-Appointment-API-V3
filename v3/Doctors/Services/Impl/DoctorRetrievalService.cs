@@ -16,8 +16,7 @@ public class DoctorRetrievalService(
     {
         var all = await context
             .DoctorsCollection
-            .FindAsync(_ => true)
-            .Result
+            .Find(_ => true)
             .ToListAsync();
         return all.Select(DoctorResponseMapper.Map).ToList();
     }

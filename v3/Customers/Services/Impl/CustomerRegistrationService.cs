@@ -20,15 +20,26 @@ public class CustomerRegistrationService(
     
     public async Task<CustomerResponseDto> Create([Required] CustomerRegistrationDto registrationDto)
     {
-        var ssn = registrationDto.PersonRegistrationDto.Ssn;
-        if (await personalDataChecker.IsSsnDuplicated(ssn)) throw new DuplicatedSsnException();
-        
-        var email = registrationDto.PersonRegistrationDto.Email;
-        if (await personalDataChecker.IsEmailDuplicated(ssn)) throw new DuplicatedEmailException();
-        
+        await ValidateHiring(
+            registrationDto.PersonRegistrationDto.Ssn,
+            registrationDto.PersonRegistrationDto.Email
+        );
         var person = personRegistrationService.Create(registrationDto.PersonRegistrationDto).Result;
         var customer = Customer.Create(registrationDto.Address, person);
         await context.CustomersCollection.InsertOneAsync(customer);
         return CustomerResponseMapper.MapToDto(customer);
+    }
+    
+    private async Task ValidateHiring(string ssn, string email)
+    {
+        if (await personalDataChecker.IsSsnDuplicated(ssn))
+        {
+            throw new DuplicatedSsnException();
+        }
+
+        if (await personalDataChecker.IsEmailDuplicated(email))
+        {
+            throw new DuplicatedEmailException();
+        }
     }
 }

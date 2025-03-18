@@ -18,63 +18,50 @@ public class MedicalSlotManagementService(
     {
         var doctor = await doctorFinder.FindByMedicalLicenceNumber(medicalLicenseNumber);
         var medialSlot = await medicalSlotFinder.FindById(medicalSlotId);
-        var doctorFilter = Builders<MedicalSlot>.Filter.Eq(x => x.Id, doctor.Id);
-        
-        if (await IsDoctorNotAssociatedWithMedicalSlot(doctor.Id))
-        {
-            throw new InaccessibleMedicalSlotException(medicalLicenseNumber);
-        }
-        
-        if (await IsMedicalSlotCanceled(doctor.Id, medialSlot.AvailableAt))
-        {
-            var message = $"Medical slot whose id is {medialSlot.Id} is already canceled.";
-            throw new ImmutableMedicalSlotException(message);
-        }
-        
-        if (await IsMedicalSlotCompleted(doctor.Id, medialSlot.AvailableAt))
-        {
-            var message = $"Medical slot whose id is {medialSlot.Id} is already completed.";
-            throw new ImmutableMedicalSlotException(message);
-        }
-        
+        await ValidateMedicalSlot(doctor.Id, medialSlot, medicalLicenseNumber);
         var update = Builders<MedicalSlot>.Update.Set(x => x.CompletedAt, DateTime.Now);
-        await context.MedicalSlotCollection.UpdateOneAsync(doctorFilter, update);
+        await context.MedicalSlotCollection.UpdateOneAsync(DoctorFilter(doctor.Id), update);
     }
     
-        public async Task Cancel(string medicalLicenseNumber, string medicalSlotId)
+    public async Task Cancel(string medicalLicenseNumber, string medicalSlotId)
     {
         var doctor = await doctorFinder.FindByMedicalLicenceNumber(medicalLicenseNumber);
         var medialSlot = await medicalSlotFinder.FindById(medicalSlotId);
-        var doctorFilter = Builders<MedicalSlot>.Filter.Eq(x => x.Id, doctor.Id);
-        
-        if (await IsDoctorNotAssociatedWithMedicalSlot(doctor.Id))
+        await ValidateMedicalSlot(doctor.Id, medialSlot, medicalLicenseNumber);
+        var update = Builders<MedicalSlot>.Update.Set(x => x.CanceledAt, DateTime.Now);
+        await context.MedicalSlotCollection.UpdateOneAsync(DoctorFilter(doctor.Id), update);
+    }
+    
+    private async Task ValidateMedicalSlot(Guid doctorId, MedicalSlot medicalSlot, string medicalLicenseNumber)
+    {
+        if (!await IsDoctorNotAssociatedWithMedicalSlot(DoctorFilter(doctorId)))
         {
             throw new InaccessibleMedicalSlotException(medicalLicenseNumber);
         }
-        
-        if (await IsMedicalSlotCanceled(doctor.Id, medialSlot.AvailableAt))
+
+        if (await IsMedicalSlotCanceled(doctorId, medicalSlot.AvailableAt))
         {
-            var message = $"Medical slot whose id is {medialSlot.Id} is already canceled.";
+            const string message = "Medical slot whose id is {id} is already canceled.";
             throw new ImmutableMedicalSlotException(message);
         }
         
-        if (await IsMedicalSlotCompleted(doctor.Id, medialSlot.AvailableAt))
+        if (await IsMedicalSlotCompleted(doctorId, medicalSlot.AvailableAt))
         {
-            var message = $"Medical slot whose id is {medialSlot.Id} is already completed.";
+            const string message = "Medical slot whose id is {id} is already completed.";
             throw new ImmutableMedicalSlotException(message);
         }
-        
-        var update = Builders<MedicalSlot>.Update.Set(x => x.CanceledAt, DateTime.Now);
-        await context.MedicalSlotCollection.UpdateOneAsync(doctorFilter, update);
     }
 
-    private async Task<bool> IsDoctorNotAssociatedWithMedicalSlot(Guid doctorId)
+    private static FilterDefinition<MedicalSlot> DoctorFilter(Guid doctorId)
     {
-        var doctorFilter = Builders<MedicalSlot>.Filter.Eq(x => x.Id, doctorId);
+        return Builders<MedicalSlot>.Filter.Eq(x => x.Id, doctorId);
+    }
+
+    private async Task<bool> IsDoctorNotAssociatedWithMedicalSlot(FilterDefinition<MedicalSlot> doctorFilter)
+    {
         return !await context
             .MedicalSlotCollection
-            .FindAsync(doctorFilter)
-            .Result
+            .Find(doctorFilter)
             .AnyAsync();
     }
         
@@ -86,8 +73,7 @@ public class MedicalSlotManagementService(
                                         Builders<MedicalSlot>.Filter.Eq(x => x.CompletedAt == null, true);
         return await context
             .MedicalSlotCollection
-            .FindAsync(filter)
-            .Result
+            .Find(filter)
             .AnyAsync();
     }
     
@@ -99,8 +85,7 @@ public class MedicalSlotManagementService(
                      Builders<MedicalSlot>.Filter.Eq(x => x.CompletedAt != null, true);
         return await context
             .MedicalSlotCollection
-            .FindAsync(filter)
-            .Result
+            .Find(filter)
             .AnyAsync();
     }
 }

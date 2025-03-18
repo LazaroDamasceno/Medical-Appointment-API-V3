@@ -22,19 +22,33 @@ public class DoctorHiringService(
     
     public async Task<DoctorResponseDto> Hire([Required] DoctorHiringDto hiringDto)
     {
-        var ssn = hiringDto.PersonRegistrationDto.Ssn;
-        if (await personalDataChecker.IsSsnDuplicated(ssn)) throw new DuplicatedSsnException();
-        
-        var email = hiringDto.PersonRegistrationDto.Email;
-        if (await personalDataChecker.IsEmailDuplicated(ssn)) throw new DuplicatedEmailException();
-
-        var medicalLicenseNumber = hiringDto.MedicalLicenseNumber;
-        if (await IsMedicalLicenseNumberDuplicated(medicalLicenseNumber)) throw new DuplicatedMedicalLicenseNumberException();
-        
+        await ValidateHiring(
+            hiringDto.PersonRegistrationDto.Ssn,
+            hiringDto.PersonRegistrationDto.Email,
+            hiringDto.MedicalLicenseNumber
+        );
         var person = await personRegistrationService.Create(hiringDto.PersonRegistrationDto);
         var doctor = Doctor.Create(hiringDto.MedicalLicenseNumber, person);
         await context.DoctorsCollection.InsertOneAsync(doctor);
         return DoctorResponseMapper.Map(doctor);
+    }
+
+    private async Task ValidateHiring(string ssn, string email, string medicalLicenseNumber)
+    {
+        if (await personalDataChecker.IsSsnDuplicated(ssn))
+        {
+            throw new DuplicatedSsnException();
+        }
+
+        if (await personalDataChecker.IsEmailDuplicated(email))
+        {
+            throw new DuplicatedEmailException();
+        }
+
+        if (await IsMedicalLicenseNumberDuplicated(medicalLicenseNumber))
+        {
+            throw new DuplicatedMedicalLicenseNumberException();
+        }
     }
 
     private async Task<bool> IsMedicalLicenseNumberDuplicated(string medicalLicenseNumber)

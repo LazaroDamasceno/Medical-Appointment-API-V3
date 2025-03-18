@@ -13,7 +13,7 @@ public class PersonRegistrationService(MongoDbContext context) : IPersonRegistra
     public async Task<Person> Create([Required] PersonRegistrationDto registrationDto)
     {
         var filter = Builders<Person>.Filter.Eq(x => x.Ssn, registrationDto.Ssn);
-        var foundPerson = await context.PeopleCollection.FindAsync(filter).Result.FirstOrDefaultAsync();
+        var foundPerson = await context.PeopleCollection.Find(filter).FirstOrDefaultAsync();
         if (foundPerson == null)
         {
             var newPerson = Person.Create(registrationDto);

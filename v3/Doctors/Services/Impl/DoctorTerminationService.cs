@@ -16,10 +16,7 @@ public class DoctorTerminationService(
     {
         var doctor = await doctorFinder.FindByMedicalLicenceNumber(medicalLicenseNumber);
         OnActiveDoctor(doctor);
-        var filter = Builders<Doctor>.Filter.Eq(x => x.MedicalLicenseNumber, doctor.MedicalLicenseNumber);
-        var update = Builders<Doctor>.Update.Set(x => x.TerminatedAt, null);
-        await context.DoctorsCollection.UpdateOneAsync(filter, update);
-        
+        await UpdateDoctor(medicalLicenseNumber);
         var doctorAuditTrail = DoctorAuditTrail.Create(doctor);
         await context.DoctorAuditTrailCollection.InsertOneAsync(doctorAuditTrail);
     }
@@ -31,5 +28,12 @@ public class DoctorTerminationService(
             const string message = "Doctor cannot be rehired, because they're already active.";
             throw new ImmutableDoctorException(message);
         }
+    }
+    
+    private async Task UpdateDoctor(string medicalLicenseNumber)
+    {
+        var filter = Builders<Doctor>.Filter.Eq(x => x.MedicalLicenseNumber, medicalLicenseNumber);
+        var update = Builders<Doctor>.Update.Set(x => x.TerminatedAt, DateTime.UtcNow);
+        await context.DoctorsCollection.UpdateOneAsync(filter, update);
     }
 }

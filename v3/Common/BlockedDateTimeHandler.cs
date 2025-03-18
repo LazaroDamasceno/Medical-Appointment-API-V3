@@ -7,8 +7,7 @@ public static class BlockedDateTimeHandler
     {
         if (BlockedDateTimeChecker.IsBeforeToday(dateTime))
         {
-            const string message = "Given date and time must today or in the future.";
-            throw new BlockedBookingDateTimeException(message);
+            throw new PastBookingDateTimeException();
         }
     }
 }

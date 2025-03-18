@@ -23,23 +23,13 @@ public class MedicalSlotRegistrationService(
                      Builders<MedicalSlot>.Filter.Eq(ms => ms.AvailableAt, registrationDto.AvailableAt) &
                      Builders<MedicalSlot>.Filter.Eq(ms => ms.CompletedAt, null) &
                      Builders<MedicalSlot>.Filter.Eq(ms => ms.CanceledAt, null);
-        var isGivenDateTimeAlreadyInUse = await context.MedicalSlotCollection.FindAsync(filter).Result.AnyAsync();
-        const string message = "Given date and time are already in use in an active medical slot.";
-        if (isGivenDateTimeAlreadyInUse) throw new BlockedBookingDateTimeException(message);
+        var isGivenDateTimeAlreadyInUse = await context.MedicalSlotCollection.FindAsync(filter).Result.AnyAsync(); 
+        if (isGivenDateTimeAlreadyInUse) throw new BlockedBookingDateTimeException();
 
-        OnPastBookingDateTimeException(registrationDto.AvailableAt);
+        BlockedDateTimeHandler.Handle(registrationDto.AvailableAt);
         
         var medicalSlot = MedicalSlot.Create(doctor, registrationDto.AvailableAt);
         await context.MedicalSlotCollection.InsertOneAsync(medicalSlot);
         return MedicalSlotResponseMapper.Map(medicalSlot);
-    }
-
-    private static void OnPastBookingDateTimeException(DateTime dateTime)
-    {
-        if (BlockedDateTimeChecker.IsBeforeToday(dateTime))
-        {
-            const string message = "Given date and time must be today or in the future.";
-            throw new BlockedBookingDateTimeException(message);
-        }
     }
 }

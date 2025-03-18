@@ -26,7 +26,7 @@ public class MedicalSlotRegistrationService(
         var isGivenDateTimeAlreadyInUse = await context.MedicalSlotCollection.FindAsync(filter).Result.AnyAsync(); 
         if (isGivenDateTimeAlreadyInUse) throw new BlockedBookingDateTimeException();
 
-        BlockedDateTimeHandler.Handle(registrationDto.AvailableAt);
+        PastDateTimeHandler.Handle(registrationDto.AvailableAt);
         
         var medicalSlot = MedicalSlot.Create(doctor, registrationDto.AvailableAt);
         await context.MedicalSlotCollection.InsertOneAsync(medicalSlot);

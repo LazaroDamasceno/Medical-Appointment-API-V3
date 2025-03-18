@@ -1,6 +1,6 @@
 ﻿namespace v3.Common;
 
-public static class BlockedDateTimeChecker
+public static class PastDateTimeChecker
 {
     
     public static bool IsBeforeToday(DateTime dateTime)

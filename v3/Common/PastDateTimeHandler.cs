@@ -7,7 +7,7 @@ public static class PastDateTimeHandler
     {
         if (PastDateTimeChecker.IsBeforeToday(dateTime))
         {
-            throw new PastBookingDateTimeException();
+            throw new PastBookingDateException();
         }
     }
 }

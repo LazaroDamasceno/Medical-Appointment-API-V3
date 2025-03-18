@@ -29,7 +29,8 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IDoctorRetrievalService, DoctorRetrievalService>();
         services.AddSingleton<MedicalSlotFinder>();
         services.AddSingleton<IMedicalSlotRegistrationService, MedicalSlotRegistrationService>();
-        services.AddSingleton<IMedicalSlotCancellationService, MedicalSlotCancellationService>();
+        services.AddSingleton<IMedicalSlotManagementService, MedicalSlotManagementService>();
+        services.AddSingleton<PersonalDataChecker>();
         return services;
     }
 }

@@ -19,18 +19,25 @@ public class MedicalSlotRegistrationService(
     public async Task<MedicalSlotResponseDto> Register([Required] MedicalSlotRegistrationDto registrationDto)
     {
         var doctor = await doctorFinder.FindByMedicalLicenceNumber(registrationDto.MedicalLicenseNumber);
-        
-        var filter = Builders<MedicalSlot>.Filter.Eq(ms => ms.Doctor.Id, doctor.Id) &
-                     Builders<MedicalSlot>.Filter.Eq(ms => ms.AvailableAt, registrationDto.AvailableAt) &
-                     Builders<MedicalSlot>.Filter.Eq(ms => ms.CompletedAt, null) &
-                     Builders<MedicalSlot>.Filter.Eq(ms => ms.CanceledAt, null);
-        var isGivenDateTimeAlreadyInUse = await context.MedicalSlotCollection.FindAsync(filter).Result.AnyAsync(); 
-        if (isGivenDateTimeAlreadyInUse) throw new BlockedBookingDateTimeException();
+
+        if (await IsBookingDateTimeUnavailable(doctor.Id, registrationDto.AvailableAt))
+        {
+            throw new UnavaialbleBookingDateTimeException();
+        }
 
         PastDateTimeHandler.Handle(registrationDto.AvailableAt);
         
         var medicalSlot = MedicalSlot.Create(doctor, registrationDto.AvailableAt);
         await context.MedicalSlotCollection.InsertOneAsync(medicalSlot);
         return MedicalSlotResponseMapper.Map(medicalSlot);
+    }
+
+    private async Task<bool> IsBookingDateTimeUnavailable(Guid doctorId, DateTime availableAt)
+    {
+        var filter = Builders<MedicalSlot>.Filter.Eq(ms => ms.Doctor.Id, doctorId) &
+                     Builders<MedicalSlot>.Filter.Eq(ms => ms.AvailableAt, availableAt) &
+                     Builders<MedicalSlot>.Filter.Eq(ms => ms.CompletedAt, null) &
+                     Builders<MedicalSlot>.Filter.Eq(ms => ms.CanceledAt, null);
+        return await context.MedicalSlotCollection.Find(filter).AnyAsync(); 
     }
 }

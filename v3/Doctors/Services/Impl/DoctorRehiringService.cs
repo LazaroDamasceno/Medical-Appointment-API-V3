@@ -28,7 +28,7 @@ public class DoctorRehiringService(
     {
         if (doctor.TerminatedAt != null)
         {
-            const string message = "Doctor cannot be terminated, because they're already terminated.";
+            const string message = "Doctor is already terminated.";
             throw new ImmutableDoctorException(message);
         }
     }

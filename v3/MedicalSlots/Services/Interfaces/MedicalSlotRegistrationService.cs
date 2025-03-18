@@ -20,7 +20,9 @@ public class MedicalSlotRegistrationService(
         var doctor = await doctorFinder.FindByMedicalLicenceNumber(registrationDto.MedicalLicenseNumber);
         
         var filter = Builders<MedicalSlot>.Filter.Eq(ms => ms.Doctor.Id, doctor.Id) &
-                     Builders<MedicalSlot>.Filter.Eq(ms => ms.AvailableAt, registrationDto.AvailableAt);
+                     Builders<MedicalSlot>.Filter.Eq(ms => ms.AvailableAt, registrationDto.AvailableAt) &
+                     Builders<MedicalSlot>.Filter.Eq(ms => ms.CompletedAt, null) &
+                     Builders<MedicalSlot>.Filter.Eq(ms => ms.CanceledAt, null);
         var isGivenDateTimeAlreadyInUse = await context.MedicalSlotCollection.FindAsync(filter).Result.AnyAsync();
         const string message = "Given date and time are already in use in an active medical slot.";
         if (isGivenDateTimeAlreadyInUse) throw new BlockedBookingDateTimeException(message);

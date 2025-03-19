@@ -32,7 +32,7 @@ public class MedicalSlotManagementService(
         await context.MedicalSlotCollection.UpdateOneAsync(DoctorFilter(doctor.Id), update);
     }
     
-    private async Task ValidateMedicalSlot(Guid doctorId, MedicalSlot medicalSlot, string medicalLicenseNumber)
+    private async Task ValidateMedicalSlot(string doctorId, MedicalSlot medicalSlot, string medicalLicenseNumber)
     {
         if (!await IsDoctorNotAssociatedWithMedicalSlot(DoctorFilter(doctorId)))
         {
@@ -52,7 +52,7 @@ public class MedicalSlotManagementService(
         }
     }
 
-    private static FilterDefinition<MedicalSlot> DoctorFilter(Guid doctorId)
+    private static FilterDefinition<MedicalSlot> DoctorFilter(string doctorId)
     {
         return Builders<MedicalSlot>.Filter.Eq(x => x.Id, doctorId);
     }
@@ -65,7 +65,7 @@ public class MedicalSlotManagementService(
             .AnyAsync();
     }
         
-    private async Task<bool> IsMedicalSlotCanceled(Guid doctorId, DateTime availableAt)
+    private async Task<bool> IsMedicalSlotCanceled(string doctorId, DateTime availableAt)
     {
         var filter = Builders<MedicalSlot>.Filter.Eq(x => x.Id, doctorId) &
                                         Builders<MedicalSlot>.Filter.Eq(x => x.AvailableAt, availableAt) &
@@ -77,7 +77,7 @@ public class MedicalSlotManagementService(
             .AnyAsync();
     }
     
-    private async Task<bool> IsMedicalSlotCompleted(Guid doctorId, DateTime availableAt)
+    private async Task<bool> IsMedicalSlotCompleted(string doctorId, DateTime availableAt)
     {
         var filter = Builders<MedicalSlot>.Filter.Eq(x => x.Id, doctorId) &
                      Builders<MedicalSlot>.Filter.Eq(x => x.AvailableAt, availableAt) &

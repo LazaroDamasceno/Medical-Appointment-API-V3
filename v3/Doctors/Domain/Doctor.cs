@@ -6,7 +6,8 @@ namespace v3.Doctors.Domain;
 public class Doctor
 {
 
-    [BsonId] public Guid Id { get; private set; } = Guid.NewGuid();
+    [BsonId] 
+    public string Id { get; private set; } = Guid.NewGuid().ToString();
     public string MedicalLicenseNumber { get; private set; }
     public Person Person { get; private set; }
     public DateTime HiredAt { get; private set; } = DateTime.UtcNow;

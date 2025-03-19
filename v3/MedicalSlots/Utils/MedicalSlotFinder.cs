@@ -10,7 +10,7 @@ public class MedicalSlotFinder(MongoDbContext context)
 
     public async Task<MedicalSlot> FindById(string id)
     {
-        var filter = Builders<MedicalSlot>.Filter.Eq(x => x.Id, Guid.Parse(id));
+        var filter = Builders<MedicalSlot>.Filter.Eq(x => x.Id, id);
         var medicalSlot = await context.MedicalSlotCollection.Find(filter).FirstOrDefaultAsync();
         if (medicalSlot == null) throw new NonExistentMedicalSlotException(id);
         return medicalSlot;

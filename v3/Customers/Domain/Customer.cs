@@ -7,7 +7,8 @@ namespace v3.Customers.Domain;
 public class Customer
 {
 
-    [BsonId] public Guid Id { get; private set; } = Guid.NewGuid();
+    [BsonId] 
+    public string Id { get; private set; } = Guid.NewGuid().ToString();
     public Address Address { get; private set; }
     public Person Person { get; private set; }
     public DateTime CreatedAt { get; private set; } = DateTime.Now;

@@ -25,7 +25,7 @@ public class MedicalSlotRegistrationService(
         return MedicalSlotResponseMapper.Map(medicalSlot);
     }
 
-    private async Task ValidateRegistration(Guid doctorId, DateTime availableAt)
+    private async Task ValidateRegistration(string doctorId, DateTime availableAt)
     {
         PastDateTimeHandler.Handle(availableAt);
         
@@ -35,7 +35,7 @@ public class MedicalSlotRegistrationService(
         }
     }
 
-    private async Task<bool> IsBookingDateTimeUnavailable(Guid doctorId, DateTime availableAt)
+    private async Task<bool> IsBookingDateTimeUnavailable(string doctorId, DateTime availableAt)
     {
         var filter = Builders<MedicalSlot>.Filter.Eq(ms => ms.Doctor.Id, doctorId) &
                      Builders<MedicalSlot>.Filter.Eq(ms => ms.AvailableAt, availableAt) &

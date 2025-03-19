@@ -7,7 +7,7 @@ public class MedicalSlot
 {
     
     [BsonId]
-    public Guid Id { get; private set; } = Guid.NewGuid();
+    public string Id { get; private set; } = Guid.NewGuid().ToString();
     public Doctor Doctor { get; private set; }
     public DateTime AvailableAt { get; private set; }
     public DateTime? CanceledAt { get; private set; }

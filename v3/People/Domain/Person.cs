@@ -8,7 +8,7 @@ public class Person
 {
 
     [BsonId] 
-    public Guid Id { get; private set; } = Guid.NewGuid();
+    public string Id { get; private set; } = Guid.NewGuid().ToString();
     private string FirstName { get; set; }
     private string MiddleName { get; set; }
     private string LastName { get; set; }

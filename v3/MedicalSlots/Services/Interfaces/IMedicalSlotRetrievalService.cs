@@ -6,5 +6,6 @@ public interface IMedicalSlotRetrievalService
 {
     Task<MedicalSlotResponseDto> FindById(string medicalSlotId);
     Task<MedicalSlotResponseDto> FindById(string medicalLicenseNumber, string medicalSlotId);
-    Task<List<MedicalSlotResponseDto>> FindAll();
+    Task<IEnumerable<MedicalSlotResponseDto>> FindAll();
+    Task<IEnumerable<MedicalSlotResponseDto>> FindAll(string medicalLicenseNumber);
 }

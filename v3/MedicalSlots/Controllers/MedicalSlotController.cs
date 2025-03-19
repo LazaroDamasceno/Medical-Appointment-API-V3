@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using v3.MedicalSlots.DTOs;
 using v3.MedicalSlots.Services.Interfaces;
 
@@ -13,22 +14,24 @@ public class MedicalSlotController(
     IMedicalSlotRetrievalService retrievalService
  ) : ControllerBase {
     
-    [HttpGet]
+    [HttpPost]
     public async Task<MedicalSlotResponseDto> Register([Required] [FromBody] MedicalSlotRegistrationDto registrationDto)
     {
         return await registrationService.Register(registrationDto);
     }
 
     [HttpPatch("{medicalLicenseNumber}/{medicalSlotId}/cancellation")]
-    public async Task Cancel(string medicalLicenseNumber, string medicalSlotId)
+    public async Task<IActionResult> Cancel(string medicalLicenseNumber, string medicalSlotId)
     {
         await managementService.Cancel(medicalLicenseNumber, medicalSlotId);
+        return NoContent();
     }
-
+    
     [HttpPatch("{medicalLicenseNumber}/{medicalSlotId}/completion")]
-    public async Task Complete(string medicalLicenseNumber, string medicalSlotId)
+    public async Task<IActionResult> Complete(string medicalLicenseNumber, string medicalSlotId)
     {
         await managementService.Complete(medicalLicenseNumber, medicalSlotId);
+        return NoContent();
     }
 
     [HttpGet("by-id/{medicalSlotId}")]

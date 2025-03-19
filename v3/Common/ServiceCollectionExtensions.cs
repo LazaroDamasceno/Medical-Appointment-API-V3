@@ -30,6 +30,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<MedicalSlotFinder>();
         services.AddSingleton<IMedicalSlotRegistrationService, MedicalSlotRegistrationService>();
         services.AddSingleton<IMedicalSlotManagementService, MedicalSlotManagementService>();
+        services.AddSingleton<IMedicalSlotRetrievalService, MedicalSlotRetrievalService>();
         return services;
     }
 }

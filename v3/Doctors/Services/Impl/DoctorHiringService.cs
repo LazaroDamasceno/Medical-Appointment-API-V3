@@ -1,13 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using MongoDB.Driver;
-using v3.Common;
 using v3.Context;
 using v3.Doctors.Domain;
 using v3.Doctors.DTOs;
 using v3.Doctors.Exceptions;
 using v3.Doctors.Services.Interfaces;
 using v3.Doctors.Utils;
-using v3.People.Domain;
 using v3.People.Exceptions;
 using v3.People.Services.Interfaces;
 

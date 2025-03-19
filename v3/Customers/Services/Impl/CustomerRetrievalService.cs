@@ -11,7 +11,7 @@ public class CustomerRetrievalService(
     CustomerFinder customerFinder
 ): ICustomerRetrievalService {
     
-    public async Task<List<CustomerResponseDto>> GetAllAsync()
+    public async Task<List<CustomerResponseDto>> GetAll()
     {
         var allCustomers = await context
             .CustomersCollection
@@ -20,7 +20,7 @@ public class CustomerRetrievalService(
         return CustomerResponseMapper.MapToList(allCustomers);
     }
 
-    public async Task<CustomerResponseDto> GetByIdAsync(string customerId)
+    public async Task<CustomerResponseDto> GetById(string customerId)
     {
         var foundCustomer = await customerFinder.FindByIdAsync(customerId);
         return CustomerResponseMapper.MapToDto(foundCustomer);

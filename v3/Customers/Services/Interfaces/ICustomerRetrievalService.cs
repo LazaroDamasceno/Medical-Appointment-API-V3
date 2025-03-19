@@ -4,6 +4,6 @@ namespace v3.Customers.Services.Interfaces;
 
 public interface ICustomerRetrievalService
 {
-    Task<List<CustomerResponseDto>> GetAllAsync();
-    Task<CustomerResponseDto> GetByIdAsync(string customerId);
+    Task<List<CustomerResponseDto>> GetAll();
+    Task<CustomerResponseDto> GetById(string customerId);
 }

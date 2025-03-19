@@ -33,7 +33,7 @@ public class DoctorController(
     }
 
     [HttpGet]
-    public Task<List<DoctorResponseDto>> GetAll()
+    public Task<IEnumerable<DoctorResponseDto>> GetAll()
     {
         return retrievalService.GetAll();
     }

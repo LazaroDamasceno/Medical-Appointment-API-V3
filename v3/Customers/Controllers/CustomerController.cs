@@ -19,14 +19,14 @@ public class CustomerController(
     }
 
     [HttpGet]
-    public async Task<List<CustomerResponseDto>> GetAllAsync()
+    public async Task<IEnumerable<CustomerResponseDto>> GetAll()
     {
-        return await retrievalService.GetAllAsync();
+        return await retrievalService.GetAll();
     }
 
     [HttpGet("{customerId}")]
-    public async Task<CustomerResponseDto> GetByIdAsync(string customerId)
+    public async Task<CustomerResponseDto> GetById(string customerId)
     {
-        return await retrievalService.GetByIdAsync(customerId);
+        return await retrievalService.GetById(customerId);
     }
 }

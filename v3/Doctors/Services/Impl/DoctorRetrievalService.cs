@@ -12,13 +12,13 @@ public class DoctorRetrievalService(
 ): IDoctorRetrievalService
 {
     
-    public async Task<List<DoctorResponseDto>> GetAll()
+    public async Task<IEnumerable<DoctorResponseDto>> GetAll()
     {
         var all = await context
             .DoctorsCollection
             .Find(_ => true)
             .ToListAsync();
-        return all.Select(DoctorResponseMapper.Map).ToList();
+        return all.Select(DoctorResponseMapper.Map);
     }
 
     public async Task<DoctorResponseDto> GetByMedicalLicenseNumber(string medicalLicenseNumber)

@@ -15,10 +15,8 @@ namespace v3.Doctors.Services.Impl;
 
 public class DoctorHiringService(
     MongoDbContext context, 
-    IPersonRegistrationService personRegistrationService,
-    PersonalDataChecker personalDataChecker
-): IDoctorHiringService
-{
+    IPersonRegistrationService personRegistrationService
+): IDoctorHiringService {
     
     public async Task<DoctorResponseDto> Hire([Required] DoctorHiringDto hiringDto)
     {
@@ -35,12 +33,12 @@ public class DoctorHiringService(
 
     private async Task ValidateHiring(string ssn, string email, string medicalLicenseNumber)
     {
-        if (await personalDataChecker.IsSsnDuplicated(ssn))
+        if (await IsSsnDuplicated(ssn))
         {
             throw new DuplicatedSsnException();
         }
 
-        if (await personalDataChecker.IsEmailDuplicated(email))
+        if (await IsEmailDuplicated(email))
         {
             throw new DuplicatedEmailException();
         }
@@ -49,6 +47,18 @@ public class DoctorHiringService(
         {
             throw new DuplicatedMedicalLicenseNumberException();
         }
+    }
+    
+    private async Task<bool> IsSsnDuplicated(string ssn)
+    {
+        var filter = Builders<Doctor>.Filter.Eq(x => x.Person.Ssn, ssn);
+        return await context.DoctorsCollection.Find(filter).AnyAsync();
+    }
+    
+    private async Task<bool> IsEmailDuplicated(string email)
+    {
+        var filter = Builders<Doctor>.Filter.Eq(x => x.Person.Email, email);
+        return await context.DoctorsCollection.Find(filter).AnyAsync();
     }
 
     private async Task<bool> IsMedicalLicenseNumberDuplicated(string medicalLicenseNumber)
